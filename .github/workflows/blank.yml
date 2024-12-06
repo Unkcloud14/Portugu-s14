@@ -1,0 +1,48 @@
+name: CI
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]  # Gatilho para execução no "push" para a branch "main"
+  pull_request:
+    branches: [ "main" ]  # Gatilho para execução no "pull request" para a branch "main"
+  workflow_dispatch:  # Permite a execução manual via "Actions" no GitHub
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # O runner será uma máquina Ubuntu
+
+    steps:
+      # Primeira etapa: checkout do código-fonte
+      - uses: actions/checkout@v4
+        name: Checar código
+
+      # Etapa para configurar o Node.js (Exemplo de projeto Node.js)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Define a versão do Node.js que será usada
+
+      # Etapa para instalar dependências do projeto
+      - name: Install dependencies
+        run: npm install  # Caso esteja utilizando Node.js, ou adapte para sua stack
+
+      # Etapa para rodar testes automatizados
+      - name: Run tests
+        run: npm test  # Aqui você pode substituir para o comando de teste da sua aplicação
+
+      # Etapa de build (caso necessário)
+      - name: Build the project
+        run: npm run build  # Se for um projeto que precise ser compilado, como um frontend em React, por exemplo
+
+      # Etapa final para o deploy (opcional)
+      - name: Deploy to server
+        run: |
+          echo "Deploy em andamento..."  # Comandos para deploy, como enviar para um servidor ou serviço
+          # Exemplo de deploy para o Heroku
+          # git remote add heroku https://git.heroku.com/seu-app.git
+          # git push heroku main
+
+      # Feedback de conclusão
+      - name: Notify completion
+        run: echo "Workflow concluído com sucesso!"
